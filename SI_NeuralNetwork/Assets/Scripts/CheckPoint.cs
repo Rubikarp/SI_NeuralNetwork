@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CheckPoint : MonoBehaviour
 {
-    public Transform nextChecpoint;
+    public Transform nextCheckpoint;
 
     private void OnTriggerEnter(Collider other)
     {

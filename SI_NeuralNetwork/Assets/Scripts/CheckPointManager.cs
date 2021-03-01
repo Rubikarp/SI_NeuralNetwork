@@ -14,7 +14,9 @@ public class CheckPointManager : MonoBehaviour
 
         for (int i = 0; i < checkPointsArray.Length; i++)
         {
-
+            checkPointsArray[i] = checkPointsParent.GetChild(i);
+            checkPointsArray[i].gameObject.AddComponent(typeof(CheckPoint));
+            checkPointsArray[i].gameObject.GetComponent<CheckPoint>().nextCheckpoint = checkPointsParent.GetChild(i+1);
         }
     }
 
