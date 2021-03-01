@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
-    public float maxSteerAngle = 42;
-    public float motorForce = 1000;
+    public float maxSteerAngle = 30;
+    public float motorForce = 250;
 
     public WheelCollider wheelFrontLeftCollider, wheelFrontRightCollider, wheelRearLeftCollider, wheelRearRightCollider;
     public Transform wheelFrontLeftTransform, wheelFrontRightTransform, wheelRearLeftTransform, wheelRearRightTransform;
@@ -14,8 +14,12 @@ public class CarController : MonoBehaviour
     public Transform centerOfMass;
 
     public float steeringAngle = 0;
-    public float horizontalInput = 0;
     public float verticalInput = 0;
+    public float horizontalInput = 0;
+
+    private float actHoriInput = 0;
+    public float rotInputSpeed = 0.08f;
+
 
     private void Start()
     {
@@ -30,7 +34,8 @@ public class CarController : MonoBehaviour
 
     void Steer()
     {
-        steeringAngle = horizontalInput * maxSteerAngle;
+        actHoriInput = Mathf.Lerp(actHoriInput, horizontalInput, rotInputSpeed);
+        steeringAngle = Mathf.Abs(actHoriInput * maxSteerAngle) > 0.1f ? actHoriInput * maxSteerAngle : 0f ;
 
         wheelFrontLeftCollider.steerAngle = steeringAngle;
         wheelFrontRightCollider.steerAngle = steeringAngle;
