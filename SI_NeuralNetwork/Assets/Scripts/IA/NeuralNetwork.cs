@@ -5,7 +5,6 @@ using System.Collections.Generic;
 [Serializable]
 public class NeuralNetwork
 {
-    //private enum Layer { Input, Hidden1, Hidden1, Output}
 
     public int[] layers;
     public float[][] neurons;
@@ -18,6 +17,7 @@ public class NeuralNetwork
     private int z;
     //Valeur tampon de la valeur d'un neurone
     private float value;
+    private float rdmNumber;
     #endregion
 
     public NeuralNetwork() { }
@@ -64,8 +64,6 @@ public class NeuralNetwork
 
     }
    
-
-
     public void CopyNetwork(NeuralNetwork _netCopy)
     {
         for (x = 0; x < _netCopy.axons.Length - 1; x++)
@@ -104,7 +102,7 @@ public class NeuralNetwork
             }
         }
     }
-    public void Mutate(float sensibility, float muteProba)
+    public void Mutate(float muteProba,float sensiEvolve, float sensiIntensity, float sensiInverse, float sensiReboot)
     {
         for (x = 0; x < axons.Length - 1; x++)
         {
@@ -112,7 +110,28 @@ public class NeuralNetwork
             {
                 for (z = 0; z < axons[x][y].Length; z++)
                 {
-                    axons[x][y][z] += UnityEngine.Random.Range(-sensibility, sensibility) * UnityEngine.Random.Range(0,2);
+                    rdmNumber = UnityEngine.Random.Range(0f, 100f);
+
+                    //Evolution de la sensibilité
+                    if (rdmNumber < muteProba * sensiEvolve)
+                    {
+                        axons[x][y][z] += UnityEngine.Random.Range(-0.1f, 0.1f);
+                    }
+                    //Evolution de la intensité
+                    else if (rdmNumber < muteProba * (sensiEvolve + sensiIntensity))
+                    {
+                        axons[x][y][z] *= UnityEngine.Random.Range(0f, 1f);
+                    }
+                    //Inverser le sens
+                    else if (rdmNumber < muteProba * (sensiEvolve + sensiIntensity + sensiInverse))
+                    {
+                        axons[x][y][z] *= -1f;
+                    }
+                    //Reboot
+                    else if (rdmNumber < muteProba * (sensiEvolve + sensiIntensity + sensiInverse + sensiReboot))
+                    {
+                        axons[x][y][z] *= UnityEngine.Random.Range(-1f, 1f);
+                    }
                 }
             }
         }

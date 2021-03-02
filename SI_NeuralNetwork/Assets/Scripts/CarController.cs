@@ -29,7 +29,6 @@ public class CarController : MonoBehaviour
     public float horizontalInput = 0;
     private float actHoriInput = 0;
 
-
     private void Awake()
     {
         rb.centerOfMass = centerOfMass.localPosition;
@@ -49,8 +48,6 @@ public class CarController : MonoBehaviour
 
         wheelFrontLeftCollider.steerAngle = steeringAngle;
         wheelFrontRightCollider.steerAngle = steeringAngle;
-
-        //Frition * steering angle
     }
 
     void Accelerate()

@@ -9,6 +9,12 @@ public class Manager : MonoBehaviour
     public float trainDur = 30;
     public float mutation = 5;
 
+    [Header("Evolve variable"),Range(0,100f)]
+    public float muteProba = 10f;
+    [Range(0, 0.1f)]
+    public float sensiEvolve = 0.1f, sensiIntensity = 0.05f, sensiInverse = 0.03f, sensiReboot = 0.01f;
+
+
     public CameraController cameraController;
     public Agent agentPrefab;
     public Transform agentsParent;
@@ -24,18 +30,17 @@ public class Manager : MonoBehaviour
     IEnumerator InitCoroutine()
     {
         NewGeneration();
-        FocusFirst();
+        //FocusFirst();
 
         yield return new WaitForSeconds(trainDur);
 
         StartCoroutine(Loop());
 
     }
-
     IEnumerator Loop()
     {
         NewGeneration();
-        FocusFirst();
+        //FocusFirst();
 
         yield return new WaitForSeconds(trainDur);
 
@@ -45,22 +50,31 @@ public class Manager : MonoBehaviour
 
     private void NewGeneration()
     {
+        //Try
         agents.Sort();
+        //CheckQueLaPopulation est complète
         AddOrRemoveAgent();
+        //Evolve & replace agent
         MutateAgents();
+        //Reset all agents
         ResetAgents();
+
         SetColors();
     }
 
     private void SetColors()
     {
-        agents[0].SetFirstColor();
+        agents[0].SetColor(Color.yellow);
 
+        float agentsHalf = agents.Count * 0.5f;
         for (int i = 1; i < agents.Count/2; i++)
         {
-            agents[i].SetDefaultColor();
+            agents[i].SetColor(Color.red);
         }
-
+        for (int i = agents.Count / 2; i < agents.Count; i++)
+        {
+            agents[i].SetColor(Color.green);
+        }
     }
 
     private void AddOrRemoveAgent()
@@ -107,9 +121,8 @@ public class Manager : MonoBehaviour
     {
         for (int i = agents.Count / 2; i < agents.Count; i++)
         {
-            agents[i].neuralNet.CopyNetwork(agents[i % agents.Count / 2].neuralNet);
-            agents[i].neuralNet.Mutate(0.1f, 0.5f);
-            agents[i].SetMutantColor();
+            agents[i].neuralNet.CopyNetwork(agents[i % (agents.Count / 2)].neuralNet);
+            agents[i].neuralNet.Mutate( muteProba, sensiEvolve, sensiIntensity, sensiInverse, sensiReboot);
         }
     }
     private void ResetAgents()
@@ -126,7 +139,6 @@ public class Manager : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(Loop());
     }
-
     public void RebootAgents()
     {
         for (int i = 0; i < agents.Count; i++)
