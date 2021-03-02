@@ -4,27 +4,37 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
-    public float maxSteerAngle = 30;
+    [Header("Parameter")]
     public float motorForce = 250;
+    [Range(5, 45)]
+    public float maxSteerAngle = 30;
+    [Range(0,0.1f)]
+    public float rotInputSpeed = 0.08f;
 
-    public WheelCollider wheelFrontLeftCollider, wheelFrontRightCollider, wheelRearLeftCollider, wheelRearRightCollider;
-    public Transform wheelFrontLeftTransform, wheelFrontRightTransform, wheelRearLeftTransform, wheelRearRightTransform;
-
+    [Header("Component")]
     public Rigidbody rb;
     public Transform centerOfMass;
+    [Space(15)]
+    public WheelCollider wheelFrontLeftCollider;
+    public WheelCollider wheelFrontRightCollider;
+    public WheelCollider wheelRearLeftCollider, wheelRearRightCollider;
+    [Space(15)]
+    public Transform wheelFrontLeftTransform;
+    public Transform wheelFrontRightTransform;
+    public Transform wheelRearLeftTransform, wheelRearRightTransform;
 
+    [Header("Information")]
     public float steeringAngle = 0;
     public float verticalInput = 0;
     public float horizontalInput = 0;
-
     private float actHoriInput = 0;
-    public float rotInputSpeed = 0.08f;
 
 
-    private void Start()
+    private void Awake()
     {
         rb.centerOfMass = centerOfMass.localPosition;
     }
+
     void FixedUpdate()
     {
         Steer();
@@ -35,10 +45,12 @@ public class CarController : MonoBehaviour
     void Steer()
     {
         actHoriInput = Mathf.Lerp(actHoriInput, horizontalInput, rotInputSpeed);
-        steeringAngle = Mathf.Abs(actHoriInput * maxSteerAngle) > 0.1f ? actHoriInput * maxSteerAngle : 0f ;
+        steeringAngle = Mathf.Abs(actHoriInput * maxSteerAngle) > 0.1f ? actHoriInput * maxSteerAngle : 0f;
 
         wheelFrontLeftCollider.steerAngle = steeringAngle;
         wheelFrontRightCollider.steerAngle = steeringAngle;
+
+        //Frition * steering angle
     }
 
     void Accelerate()
@@ -67,7 +79,7 @@ public class CarController : MonoBehaviour
         tr.rotation = quat;
     }
 
-    private void Reset()
+    public void Reset()
     {
         horizontalInput = 0;
         verticalInput = 0;
