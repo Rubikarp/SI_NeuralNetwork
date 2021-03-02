@@ -2705,10 +2705,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbf49540a1a3a90469d9dd54fbc62681, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  popSize: 90
-  trainDur: 30
+  popSize: 100
+  trainDur: 20
   mutation: 40
-  muteProba: 10
+  muteProba: 25
   sensiEvolve: 0.1
   sensiIntensity: 0.05
   sensiInverse: 0.03
@@ -4025,7 +4025,7 @@ PrefabInstance:
     - target: {fileID: 5106546367305145190, guid: e6199709c5f747840bf6e61c7971b8db,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 46.83
+      value: 13.96
       objectReference: {fileID: 0}
     - target: {fileID: 5106546367305145190, guid: e6199709c5f747840bf6e61c7971b8db,
         type: 3}
@@ -4035,7 +4035,7 @@ PrefabInstance:
     - target: {fileID: 5106546367305145190, guid: e6199709c5f747840bf6e61c7971b8db,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.024000168
+      value: 0.03
       objectReference: {fileID: 0}
     - target: {fileID: 5106546367305145190, guid: e6199709c5f747840bf6e61c7971b8db,
         type: 3}
