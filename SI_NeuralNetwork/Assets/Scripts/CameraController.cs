@@ -14,7 +14,7 @@ public class CameraController : MonoBehaviour
 
     private Vector3 wantedPos;
 
-    void Update()
+    void FixedUpdate()
     {
         wantedPos = target.TransformPoint(camLocalPos);
         wantedPos.y = target.position.y + 2;
