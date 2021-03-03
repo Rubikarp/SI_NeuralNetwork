@@ -923,7 +923,7 @@ GameObject:
   - component: {fileID: 4732332646820043756}
   - component: {fileID: 878616715820312447}
   - component: {fileID: 6720109923663019553}
-  m_Layer: 5
+  m_Layer: 1
   m_Name: MapFeedBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -939,7 +939,7 @@ Transform:
   m_GameObject: {fileID: 6782094257343089260}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 5, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children: []
   m_Father: {fileID: 2191891034129639586}
   m_RootOrder: 0

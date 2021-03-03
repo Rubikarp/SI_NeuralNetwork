@@ -56,7 +56,6 @@ public class Agent : MonoBehaviour, IComparable<Agent>
 
     public void InputUpdate()
     {
-
         //Velocity
         input[0] = (float)Math.Tanh(rb.velocity.magnitude * 0.1f);
         //Road Orientation
@@ -74,7 +73,6 @@ public class Agent : MonoBehaviour, IComparable<Agent>
         input[4] = NextDoorOrientation(transform);
 
         input[5] = 1f;
-
     }
 
     float NearTrackOrientation(Transform car)

@@ -30,17 +30,24 @@ public class Manager : MonoBehaviour
     IEnumerator InitCoroutine()
     {
         NewGeneration();
-        //FocusFirst();
-
+        FocusFirst();
+        InitNeuralNetView();
         yield return new WaitForSeconds(trainDur);
 
         StartCoroutine(Loop());
 
     }
+
+    private void InitNeuralNetView()
+    {
+        NeuralNetworkViewer.instance.Init(agents[0]);
+    }
+
     IEnumerator Loop()
     {
         NewGeneration();
-        //FocusFirst();
+        FocusFirst();
+        InitNeuralNetView();
 
         yield return new WaitForSeconds(trainDur);
 
@@ -146,5 +153,43 @@ public class Manager : MonoBehaviour
             agents[i].neuralNet = new NeuralNetwork(agent.neuralNet.layers);
         }
         EndTrain();
+    }
+
+    public void Save()
+    {
+        List<NeuralNetwork> _nets = new List<NeuralNetwork>();
+        
+            
+        for (int i = 0; i < agents.Count; i++)
+        {
+            _nets.Add(agents[i].neuralNet);
+        }
+
+         Data data = new Data(_nets);
+    }
+
+    public void Load()
+    {
+        Data data = DataManager.instance.Load();
+
+        if (data != null)
+        {
+            if (agents.Count > data.nets.Count)
+            {
+                for (int i = 0; i < data.nets.Count; i++)
+                {
+                    agents[i].neuralNet = data.nets[i];
+                }
+            }
+            else
+            {
+                for (int i = 0; i < agents.Count; i++)
+                {
+                    agents[i].neuralNet = data.nets[i];
+                }
+            }
+        }
+
+        RebootAgents();
     }
 }

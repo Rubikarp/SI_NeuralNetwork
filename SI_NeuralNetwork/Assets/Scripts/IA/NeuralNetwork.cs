@@ -57,13 +57,18 @@ public class NeuralNetwork
 
                 for (z = 0; z < layers[x]; z++)
                 {
-                    axons[x][y][z] = UnityEngine.Random.Range(-1f, 1f);
+                    axons[x][y][z] = InitAxonValue();
                 }
             }
         }
 
     }
-   
+    private float InitAxonValue()
+    {
+        return UnityEngine.Random.Range(-1f, 1f);
+    }
+
+
     public void CopyNetwork(NeuralNetwork _netCopy)
     {
         for (x = 0; x < _netCopy.axons.Length - 1; x++)
