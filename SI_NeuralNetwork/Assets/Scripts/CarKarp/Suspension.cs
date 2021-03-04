@@ -1,48 +1,97 @@
-﻿using UnityEngine;
-
-public enum SuspensionPos { FrontRight, FrontLeft , RearRight, RearLeft }
+﻿using System;
+using UnityEngine;
 
 public class Suspension : MonoBehaviour
 {
-
     [Header("Suspension Pos")]
     public Transform FrontRight;
     public Transform FrontLeft, RearRight, RearLeft;
     
-    [Header("Variable")]
+    [Header("Info")]
     public Rigidbody rb = null;
     public LayerMask terrainLayer;
-    private Vector3 suspForce = Vector3.zero;
+    public bool onGround = false;
 
-    [Min(0)]
-    public float suspStrength = 1f;
+    [Header("Suspension > WheelHeight")]
+    public float suspHeight = 0.5f;
+    public float wheelsHeight = 0.5f;
 
-    [Range(0f, 1f)]
-    public float suspHeight = 0.3f;
+    public float springMultiplier = 10f;
 
     private void FixedUpdate()
     {
-        ApplySpringForce(FrontRight);
-        ApplySpringForce(FrontLeft);
-        ApplySpringForce(RearRight);
-        ApplySpringForce(RearLeft);
+        onGround = IsOnGround();
+
+        ApplyWheelForce(FrontRight);
+        ApplyWheelForce(FrontLeft);
+        ApplyWheelForce(RearRight);
+        ApplyWheelForce(RearLeft);
     }
 
-    public void ApplySpringForce(Transform susp)
+    private bool IsOnGround()
     {
-        float compressionRatio = RayProximity(susp.position, -susp.up, suspHeight);
-
-        if (compressionRatio > 0)
+        if (RayTouch(FrontRight.position, -FrontRight.up, wheelsHeight + suspHeight))
         {
-            suspForce = suspStrength * compressionRatio * susp.up;
-            rb.AddForceAtPosition(suspForce, susp.position, ForceMode.Acceleration);
+            return true;
+        }
+        else if (RayTouch(FrontLeft.position, -FrontLeft.up, wheelsHeight + suspHeight))
+        {
+            return true;
+        }
+        else if (RayTouch(RearRight.position, -RearRight.up, wheelsHeight + suspHeight))
+        {
+            return true;
+        }
+        else if (RayTouch(RearLeft.position, -RearLeft.up, wheelsHeight + suspHeight))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void ApplyWheelForce(Transform susp)
+    {
+        float compressionRatio = springCompression(susp.position + (-susp.up * wheelsHeight), -susp.up, suspHeight);
+
+        compressionRatio = Mathf.Clamp01(compressionRatio);
+
+
+        Vector3 defaultPos = susp.position + (-susp.up * (suspHeight * 0.5f));
+        susp.GetChild(0).position = defaultPos + (1-compressionRatio) * (-susp.up * suspHeight * 0.8f);
+
+    }
+    public bool RayTouch(Vector3 _pos, Vector3 _dir, float lenght)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(_pos, _dir, out hit, lenght, terrainLayer))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
-    /// <summary>
-    /// Retourne une float entre 0 et 1 représentant la proximité d'un élément.
-    /// 0 signifie que rien n'est détecter et 1 signifie qu'on est au contact avec un élément
-    /// </summary>
+    public float springCompression(Vector3 _pos, Vector3 _dir, float lenght)
+    {
+        RaycastHit hit;
+        float compression = 0;
+
+        if (Physics.Raycast(_pos, _dir, out hit, lenght, terrainLayer))
+        {
+            compression = (lenght - hit.distance) / lenght;
+
+            Debug.DrawRay(_pos, _dir * lenght, Color.Lerp(Color.green, Color.red, compression));
+        }
+        else
+        {
+            Debug.DrawRay(_pos, _dir * lenght, Color.green);
+        }
+
+
+        return compression;
+    }
     public float RayProximity(Vector3 _pos, Vector3 _dir, float lenght)
     {
         RaycastHit hit;
@@ -54,7 +103,7 @@ public class Suspension : MonoBehaviour
             hitProximity = (lenght - hit.distance) / lenght;
         }
 
-        Debug.DrawRay(_pos, hit.distance < 0 ? _dir * hit.distance : _dir * lenght, Color.Lerp(Color.green, Color.red, hitProximity));
+        //Debug.DrawRay(_pos, hit.distance < 0 ? _dir * hit.distance : _dir * lenght, Color.Lerp(Color.green, Color.red, hitProximity));
 
         return hitProximity;
     }
@@ -72,13 +121,12 @@ public class Suspension : MonoBehaviour
 
         return impactPoint;
     }
-
     public Vector3 NormalFromSurfrom()
     {
-        Vector3 frontRightImp = RayImpactPoint( FrontRight.position, -FrontRight.up, 10);
-        Vector3 frontLeftImp = RayImpactPoint( FrontLeft.position, -FrontLeft.up, 10);
-        Vector3 rearRightImp = RayImpactPoint( RearRight.position, -RearRight.up, 10);
-        Vector3 rearLeftImp = RayImpactPoint( RearLeft.position, -RearLeft.up, 10);
+        Vector3 frontRightImp = RayImpactPoint( FrontRight.position, Vector3.down, 10);
+        Vector3 frontLeftImp = RayImpactPoint( FrontLeft.position, Vector3.down, 10);
+        Vector3 rearRightImp = RayImpactPoint( RearRight.position, Vector3.down, 10);
+        Vector3 rearLeftImp = RayImpactPoint( RearLeft.position, Vector3.down, 10);
 
         Vector3 left = frontLeftImp - rearRightImp;
         Vector3 right = frontRightImp - rearLeftImp;

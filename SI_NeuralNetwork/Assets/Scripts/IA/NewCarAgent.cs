@@ -1,11 +1,11 @@
 ﻿using System;
 using UnityEngine;
 
-public class Agent : MonoBehaviour, IComparable<Agent>
+public class NewCarAgent : MonoBehaviour, IComparable<Agent>
 {
-    public CarController carController = null;
+    public MyArcadeCarController carController = null;
     public Rigidbody rb = null;
-    
+
     public NeuralNetwork neuralNet;
     public float fitness = 0;
     public float distanceMade = 0;
@@ -118,16 +118,16 @@ public class Agent : MonoBehaviour, IComparable<Agent>
 
     float RaySensor(Vector3 _pos, Vector3 _dir, float lenght)
     {
-        if(Physics.Raycast(_pos, _dir, out hit, lenght * rayRange, layerM))
+        if (Physics.Raycast(_pos, _dir, out hit, lenght * rayRange, layerM))
         {
             Debug.DrawRay(_pos, _dir * hit.distance, Color.Lerp(Color.red, Color.green, (lenght * rayRange - hit.distance) / (rayRange * lenght)));
-            
-            return (lenght * rayRange - hit.distance)/(rayRange*lenght);
+
+            return (lenght * rayRange - hit.distance) / (rayRange * lenght);
         }
         else
         {
-            Debug.DrawRay(_pos, _dir * hit.distance,Color.red);
-            
+            Debug.DrawRay(_pos, _dir * hit.distance, Color.red);
+
             return 0;
         }
     }
@@ -136,8 +136,8 @@ public class Agent : MonoBehaviour, IComparable<Agent>
     {
         neuralNet.FeedForward(input);
 
-        carController.horizontalInput = neuralNet.neurons[neuralNet.layers.Length-1][0];
-        carController.verticalInput = neuralNet.neurons[neuralNet.layers.Length-1][1];
+        carController.horizontalInput = neuralNet.neurons[neuralNet.layers.Length - 1][0];
+        carController.verticalInput = neuralNet.neurons[neuralNet.layers.Length - 1][1];
 
     }
 
@@ -155,7 +155,7 @@ public class Agent : MonoBehaviour, IComparable<Agent>
     {
         distanceMade += nextCheckPtDist;
         nextCheckpoint = checkpoint;
-        nextCheckPtDist = Vector3.Magnitude(transform.position - nextCheckpoint.position) ;
+        nextCheckPtDist = Vector3.Magnitude(transform.position - nextCheckpoint.position);
     }
 
     public void SetColor(Color _color)
@@ -168,4 +168,5 @@ public class Agent : MonoBehaviour, IComparable<Agent>
     {
         return (int)(other.fitness - fitness);
     }
+
 }

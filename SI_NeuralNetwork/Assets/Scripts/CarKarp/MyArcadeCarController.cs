@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class MyArcadeCarController : MonoBehaviour
 {
     [Header("Wheels Pos")]
@@ -12,6 +14,8 @@ public class MyArcadeCarController : MonoBehaviour
     public float speedFactor = 200;
     public float turnFactor = 200;
 
+    public AnimationCurve slidingCurve;
+    public float roadFriction = 10f;
 
     [Header("Information")]
     public float verticalInput = 0;
@@ -20,13 +24,18 @@ public class MyArcadeCarController : MonoBehaviour
     private void Awake()
     {
         rb = this.gameObject.GetComponent<Rigidbody>();
-        rb.centerOfMass = centerOfMass.position;
+        rb.centerOfMass = centerOfMass.localPosition;
     }
 
     private void FixedUpdate()
     {
-        MotorControl(verticalInput);
-        TurnControl(horizontalInput);
+        if (susp.onGround)
+        {
+            MotorControl(verticalInput);
+            TurnControl(horizontalInput * (float)Math.Tanh(rb.velocity.magnitude * 0.1f));
+
+            RoadTraction(roadFriction);
+        }
     }
 
     private void MotorControl(float input)
@@ -40,10 +49,9 @@ public class MyArcadeCarController : MonoBehaviour
 
         if (Mathf.Abs(input) > 0)
         {
-            rb.AddForce(Dir * speedForce);
+            rb.AddForce(Dir * speedForce, ForceMode.Acceleration);
         }
     }
-
     private void TurnControl(float input)
     {
         //Vector3 normal = susp.NormalFromSurfrom().normalized;
@@ -51,7 +59,20 @@ public class MyArcadeCarController : MonoBehaviour
 
         if (Mathf.Abs(input) > 0)
         {
-            rb.AddTorque(normal * input * turnFactor);
+            rb.AddTorque(normal * input * turnFactor, ForceMode.Acceleration);
         }
+    }
+    
+    private void RoadTraction(float groundFriction)
+    {
+        float dir = Vector3.Dot(rb.velocity, rb.transform.right);
+
+        rb.AddForce(rb.transform.right * -dir * rb.mass * groundFriction);
+    }
+
+    public void Reset()
+    {
+        horizontalInput = 0;
+        verticalInput = 0;
     }
 }

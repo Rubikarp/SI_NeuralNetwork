@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 785823952}
-  camLocalPos: {x: 0, y: 0, z: -5}
+  camLocalPos: {x: 0, y: 2, z: -5}
   localTargetLookAtPos: {x: 0, y: 1, z: 3}
   posLerpSpeed: 0.1
   lookLerpSpeed: 0.8
@@ -652,17 +652,17 @@ PrefabInstance:
     - target: {fileID: 905308853071886405, guid: 456374847d594c94a891b089d8dbcee0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 21.085
       objectReference: {fileID: 0}
     - target: {fileID: 905308853071886405, guid: 456374847d594c94a891b089d8dbcee0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10
+      value: 2.66
       objectReference: {fileID: 0}
     - target: {fileID: 905308853071886405, guid: 456374847d594c94a891b089d8dbcee0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1.21
       objectReference: {fileID: 0}
     - target: {fileID: 905308853071886405, guid: 456374847d594c94a891b089d8dbcee0,
         type: 3}
