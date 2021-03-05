@@ -18,7 +18,7 @@ public class NeuralNetworkViewer : MonoBehaviour
     public RectTransform fitnessPrefab;
     private RectTransform fitness;
 
-    public Agent agent;
+    public AgentsARD agent;
 
     private Image[][]   neurons;
     private Text[][]    neuronsValue;
@@ -42,13 +42,13 @@ public class NeuralNetworkViewer : MonoBehaviour
         instance = this;
     }
 
-    public void Init(Agent _agent)
+    public void Init(AgentsARD _agent)
     {
         agent = _agent;
-        Init(agent.neuralNet);
+        Init(agent.brain);
     }
 
-    void Init(NeuralNetwork neuralNet)
+    void Init(NeuralNetworkARD neuralNet)
     {
         for (i = viewerGroup.childCount - 1; i > -1; i--)
         {
@@ -92,19 +92,19 @@ public class NeuralNetworkViewer : MonoBehaviour
             }
         }
         
-        axons = new Image[neuralNet.axons.Length][][];
+        axons = new Image[neuralNet.axonsNet.axons.Length][][];
 
-        for (x = 0; x < neuralNet.axons.Length; x++)
+        for (x = 0; x < neuralNet.axonsNet.axons.Length; x++)
         {
-            axons[x] = new Image[neuralNet.axons[x].Length][];
+            axons[x] = new Image[neuralNet.axonsNet.axons[x].Length][];
 
-            for (y = 0; y < neuralNet.axons[x].Length; y++)
+            for (y = 0; y < neuralNet.axonsNet.axons[x].Length; y++)
             {
-                axons[x][y] = new Image[neuralNet.axons[x][y].Length];
+                axons[x][y] = new Image[neuralNet.axonsNet.axons[x][y].Length];
 
-                for (z = 0; z < neuralNet.axons[x][y].Length; z++)
+                for (z = 0; z < neuralNet.axonsNet.axons[x][y].Length; z++)
                 {
-                    if ((neuralNet.axons[x].Length) % 2 == 0)
+                    if ((neuralNet.axonsNet.axons[x].Length) % 2 == 0)
                     {
                         yAdd = 1.0f;
                     }
@@ -123,7 +123,7 @@ public class NeuralNetworkViewer : MonoBehaviour
                     }
                     
                     
-                    if ((neuralNet.axons[x][y].Length) % 2 == 0)
+                    if ((neuralNet.axonsNet.axons[x][y].Length) % 2 == 0)
                     {
                         zAdd = 1.0f;
                     }
@@ -171,12 +171,12 @@ public class NeuralNetworkViewer : MonoBehaviour
 
     public void Update()
     {
-        for (x = 0; x < agent.neuralNet.neurons.Length; x++)
+        for (x = 0; x < agent.brain.neurons.Length; x++)
         {
-            for (y = 0; y < agent.neuralNet.neurons[x].Length; y++)
+            for (y = 0; y < agent.brain.neurons[x].Length; y++)
             {
-                neurons[x][y].color     = colorGradient.Evaluate((agent.neuralNet.neurons[x][y] + 1) * .5f);
-                neuronsValue[x][y].text = agent.neuralNet.neurons[x][y].ToString("F2");
+                neurons[x][y].color     = colorGradient.Evaluate((agent.brain.neurons[x][y] + 1) * .5f);
+                neuronsValue[x][y].text = agent.brain.neurons[x][y].ToString("F2");
             }
         }
 
@@ -185,13 +185,13 @@ public class NeuralNetworkViewer : MonoBehaviour
 
     public void RefreshAxon()
     {
-        for (x = 0; x < agent.neuralNet.axons.Length; x++)
+        for (x = 0; x < agent.brain.axonsNet.axons.Length; x++)
         {
-            for (y = 0; y < agent.neuralNet.axons[x].Length; y++)
+            for (y = 0; y < agent.brain.axonsNet.axons[x].Length; y++)
             {
-                for (z = 0; z < agent.neuralNet.axons[x][y].Length; z++)
+                for (z = 0; z < agent.brain.axonsNet.axons[x][y].Length; z++)
                 {
-                    axons[x][y][z].color = colorGradient.Evaluate((agent.neuralNet.axons[x][y][z] + 1) * .5f);
+                    axons[x][y][z].color = colorGradient.Evaluate((agent.brain.axonsNet.axons[x][y][z] + 1) * .5f);
                 }
             }
         }

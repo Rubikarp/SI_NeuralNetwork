@@ -92,21 +92,6 @@ public class Suspension : MonoBehaviour
 
         return compression;
     }
-    public float RayProximity(Vector3 _pos, Vector3 _dir, float lenght)
-    {
-        RaycastHit hit;
-        //0 rien et 1 au contact
-        float hitProximity = 0;
-
-        if (Physics.Raycast(_pos, _dir, out hit, lenght, terrainLayer))
-        {
-            hitProximity = (lenght - hit.distance) / lenght;
-        }
-
-        //Debug.DrawRay(_pos, hit.distance < 0 ? _dir * hit.distance : _dir * lenght, Color.Lerp(Color.green, Color.red, hitProximity));
-
-        return hitProximity;
-    }
 
     public Vector3 RayImpactPoint(Vector3 _pos, Vector3 _dir, float lenght)
     {

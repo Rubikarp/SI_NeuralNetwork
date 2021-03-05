@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+[Serializable]
 public struct AxonsNet
 {
     public float[][][] axons;
@@ -18,15 +19,15 @@ public struct AxonsNet
 
                 for (int z = 0; z < layers[x]; z++)
                 {
-                    axons[x][y][z] = 1;
+                    axons[x][y][z] = UnityEngine.Random.Range(-1f,1f);
                 }
             }
         }
 
     }
-
 }
 
+[Serializable]
 public class NeuralNetworkARD
 {
     [Header("NeuralNetwork")]
@@ -85,7 +86,16 @@ public class NeuralNetworkARD
 
     public void CopyNetwork(NeuralNetworkARD _neuralNetCopy)
     {
-        axonsNet = _neuralNetCopy.axonsNet;
+        for (x = 0; x < _neuralNetCopy.axonsNet.axons.Length - 1; x++)
+        {
+            for (y = 0; y < _neuralNetCopy.axonsNet.axons[x].Length; y++)
+            {
+                for (z = 0; z < _neuralNetCopy.axonsNet.axons[x][y].Length; z++)
+                {
+                    axonsNet.axons[x][y][z] = _neuralNetCopy.axonsNet.axons[x][y][z];
+                }
+            }
+        }
     }
     public float[] ReactToIput(float[] inputs)
     {

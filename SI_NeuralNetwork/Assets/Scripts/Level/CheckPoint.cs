@@ -8,11 +8,11 @@ public class CheckPoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.transform.parent.GetComponent<Agent>())
+        if (other.transform.parent.GetComponent<AgentsARD>())
         {
-           if(other.transform.parent.GetComponent<Agent>().nextCheckpoint == transform)
+           if(other.transform.parent.GetComponent<AgentsARD>().nextCheckpoint == transform)
             {
-                other.transform.parent.GetComponent<Agent>().CheckpointReached(nextCheckpoint);
+                other.transform.parent.GetComponent<AgentsARD>().CheckpointReached(nextCheckpoint);
             }
         }
     }

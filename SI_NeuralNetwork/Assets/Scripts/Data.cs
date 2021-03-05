@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 public class Data
 {
-    public List<NeuralNetwork> nets;
+    public List<NeuralNetworkARD> nets;
 
     public Data()
     {
-        nets = new List<NeuralNetwork>();
+        nets = new List<NeuralNetworkARD>();
     }
 
-    public Data(List<NeuralNetwork> _nets)
+    public Data(List<NeuralNetworkARD> _nets)
     {
         nets = _nets;
     }

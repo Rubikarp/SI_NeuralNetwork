@@ -16,11 +16,11 @@ public class Manager : MonoBehaviour
 
 
     public CameraController cameraController;
-    public Agent agentPrefab;
+    public AgentsARD agentPrefab;
     public Transform agentsParent;
 
-    Agent agent;
-    List<Agent> agents = new List<Agent>();
+    AgentsARD agent;
+    List<AgentsARD> agents = new List<AgentsARD>();
 
     private void Start()
     {
@@ -109,7 +109,7 @@ public class Manager : MonoBehaviour
     private void AddAgent()
     {
         agent = Instantiate(agentPrefab, Vector3.zero, Quaternion.identity, agentsParent);
-        agent.neuralNet = new NeuralNetwork(agent.neuralNet.layers);
+        agent.brain = new NeuralNetworkARD(agent.brain.layers);
 
         agents.Add(agent);
     }
@@ -128,8 +128,8 @@ public class Manager : MonoBehaviour
     {
         for (int i = agents.Count / 2; i < agents.Count; i++)
         {
-            agents[i].neuralNet.CopyNetwork(agents[i % (agents.Count / 2)].neuralNet);
-            agents[i].neuralNet.Mutate( muteProba, sensiEvolve, sensiIntensity, sensiInverse, sensiReboot);
+            agents[i].brain.CopyNetwork(agents[i % (agents.Count / 2)].brain);
+            agents[i].brain.Mutate();
         }
     }
     private void ResetAgents()
@@ -150,19 +150,19 @@ public class Manager : MonoBehaviour
     {
         for (int i = 0; i < agents.Count; i++)
         {
-            agents[i].neuralNet = new NeuralNetwork(agent.neuralNet.layers);
+            agents[i].brain = new NeuralNetworkARD(agent.brain.layers);
         }
         EndTrain();
     }
 
     public void Save()
     {
-        List<NeuralNetwork> _nets = new List<NeuralNetwork>();
+        List<NeuralNetworkARD> _nets = new List<NeuralNetworkARD>();
         
             
         for (int i = 0; i < agents.Count; i++)
         {
-            _nets.Add(agents[i].neuralNet);
+            _nets.Add(agents[i].brain);
         }
 
          Data data = new Data(_nets);
@@ -178,14 +178,14 @@ public class Manager : MonoBehaviour
             {
                 for (int i = 0; i < data.nets.Count; i++)
                 {
-                    agents[i].neuralNet = data.nets[i];
+                    agents[i].brain = data.nets[i];
                 }
             }
             else
             {
                 for (int i = 0; i < agents.Count; i++)
                 {
-                    agents[i].neuralNet = data.nets[i];
+                    agents[i].brain = data.nets[i];
                 }
             }
         }
