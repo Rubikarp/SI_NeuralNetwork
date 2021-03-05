@@ -32,8 +32,9 @@ public class MyArcadeCarController : MonoBehaviour
         if (susp.onGround)
         {
             MotorControl(verticalInput);
-            TurnControl(horizontalInput * (float)Math.Tanh(rb.velocity.magnitude * 0.1f));
 
+            TurnControl(horizontalInput * (float)Math.Tanh(rb.velocity.magnitude * 0.1f));
+            
             RoadTraction(roadFriction);
         }
     }
